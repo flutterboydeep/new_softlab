@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">514026097843178</string>
+    <string name="fb_login_protocol_scheme">fb514026097843178</string>
+    <string name="facebook_client_token">7c74aaa833c9fe414bc918e15f7542a8</string>
+    <string name="app_name">"new_softlab"</string>
+
+</resources>
