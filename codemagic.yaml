@@ -2,7 +2,7 @@ workflows:
   ios-workflow:
     name: iOS Workflow
     environment:
-      flutter: latest
+      flutter: 3.19.5
       xcode: latest
     scripts:
       - name: "Generate Podfile and build iOS dependencies"
