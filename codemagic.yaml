@@ -2,17 +2,16 @@ workflows:
   ios-workflow:
     name: iOS Workflow
     environment:
-      flutter: 3.19.5  # Use your specific Flutter version
-      xcode: 15.0    # Use the latest Xcode version, or specify a version like '15.0'
+      flutter: 3.19.5
+      xcode: 15.0
     scripts:
-      - name: "Generate Podfile and update iOS platform version"
+      - name: Set iOS deployment target
         script: |
           cd ios
-          flutter build ios || true  # Generate Podfile if it doesn't exist
+          echo "Setting iOS deployment target in Podfile"
           if ! grep -q "platform :ios, '13.0'" Podfile; then
-            echo "Adding iOS platform 13.0 to Podfile"
-            echo "platform :ios, '13.0'" | cat - Podfile > temp && mv temp Podfile
+            sed -i '' '1s/^/platform :ios, "13.0"\n/' Podfile
           fi
-          pod install
+          pod install --repo-update
     artifacts:
       - build/ios/ipa
