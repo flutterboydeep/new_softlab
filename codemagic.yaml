@@ -1,0 +1,14 @@
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    environment:
+      flutter: latest
+      xcode: latest
+    scripts:
+      - name: "Generate Podfile and build iOS dependencies"
+        script: |
+          cd ios
+          flutter build ios  # Generates the Podfile if it’s missing
+          pod install        # Installs dependencies using the new Podfile
+    artifacts:
+      - build/ios/ipa
