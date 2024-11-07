@@ -3,7 +3,7 @@ workflows:
     name: iOS Workflow
     environment:
       flutter: 3.19.5  # Use your specific Flutter version
-      xcode: latest    # Use the latest Xcode version, or specify a version like '15.0'
+      xcode: 15.0    # Use the latest Xcode version, or specify a version like '15.0'
     scripts:
       - name: "Generate Podfile and update iOS platform version"
         script: |
