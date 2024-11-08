@@ -7,6 +7,8 @@ workflows:
     scripts:
       - name: Run Flutter Pub Get
         script: flutter pub get
+      - name: Build iOS project to generate podhelper.rb
+        script: flutter build ios
       - name: Set iOS deployment target
         script: |
           cd ios
