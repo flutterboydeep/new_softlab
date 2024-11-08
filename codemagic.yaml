@@ -9,6 +9,14 @@ workflows:
         script: flutter pub get
       - name: Build iOS project to generate podhelper.rb
         script: flutter build ios --no-codesign
+      - name: Verify podhelper.rb file exists
+        script: |
+          if [ ! -f ios/.ios/Flutter/podhelper.rb ]; then
+            echo "Error: podhelper.rb not found. Exiting."
+            exit 1
+          else
+            echo "podhelper.rb found. Proceeding with pod install."
+          fi
       - name: Set iOS deployment target
         script: |
           cd ios
