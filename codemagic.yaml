@@ -5,6 +5,8 @@ workflows:
       flutter: 3.19.5
       xcode: 15.0
     scripts:
+      - name: Run Flutter Pub Get
+        script: flutter pub get
       - name: Set iOS deployment target
         script: |
           cd ios
@@ -12,6 +14,7 @@ workflows:
           if ! grep -q "platform :ios, '13.0'" Podfile; then
             sed -i '' '1s/^/platform :ios, "13.0"\n/' Podfile
           fi
-          pod install --repo-update
+      - name: Install CocoaPods
+        script: pod install --repo-update
     artifacts:
       - build/ios/ipa
