@@ -1,16 +1,11 @@
-# Set the platform version to iOS 13.0
 platform :ios, '13.0'
 
-# Ignore all warnings from all pods
 inhibit_all_warnings!
 
-# Set up the target for Flutter
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # This part is required to load Flutter dependencies
-  # Ensure this path points to your Flutter installation
   flutter_application_path = File.expand_path('..', __dir__)
   load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
 
