@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "149907476088",
+    "project_id": "learnfirebase-5b791",
+    "storage_bucket": "learnfirebase-5b791.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149907476088:android:8f1833c57f522d769ca78d",
+        "android_client_info": {
+          "package_name": "com.example.new_softlab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149907476088-cn02hgs28p5t3t31kbjeuju5rkmo24ti.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.new_softlab",
+            "certificate_hash": "45cf8bf3422ae8eb53e69f5852f4b1cc34162b6c"
+          }
+        },
+        {
+          "client_id": "149907476088-9mugo51251kgb5a6s2jlhk1i2r23mt52.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD4ADj8MkDbtPMiD6z5byj8LmjSkOa8ZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149907476088-9mugo51251kgb5a6s2jlhk1i2r23mt52.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "149907476088-5rc0ak27uuavs3ppg3hpafusv2fuvktu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.newSoftlab"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
