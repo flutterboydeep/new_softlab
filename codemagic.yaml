@@ -7,9 +7,10 @@ workflows:
     scripts:
       - name: Run Flutter Pub Get
         script: flutter pub get
+
       - name: Ensure `podhelper.rb` exists
         script: |
-          cd ios/.ios/Flutter
+          cd ios/Flutter
           if [ ! -f "podhelper.rb" ]; then
             echo "Creating podhelper.rb manually"
             echo "# podhelper.rb" > podhelper.rb
@@ -17,14 +18,21 @@ workflows:
             echo "flutter_application_path = File.expand_path('..', __dir__)" >> podhelper.rb
             echo "flutter_install_all_ios_pods(flutter_application_path)" >> podhelper.rb
           fi
+
       - name: Set iOS deployment target
         script: |
           cd ios
           echo "Setting iOS deployment target in Podfile"
+          # Check if the target is already set, and if not, set it
           if ! grep -q "platform :ios, '13.0'" Podfile; then
             sed -i '' '1s/^/platform :ios, "13.0"\n/' Podfile
           fi
+
       - name: Install CocoaPods
-        script: pod install --repo-update
+        script: |
+          cd ios
+          echo "Installing CocoaPods"
+          pod install --repo-update
+
     artifacts:
       - build/ios/ipa
