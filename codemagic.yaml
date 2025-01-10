@@ -8,6 +8,9 @@ workflows:
       - name: Run Flutter Pub Get
         script: flutter pub get
 
+      - name: Clean build artifacts
+        script: flutter clean
+
       - name: Ensure `podhelper.rb` exists
         script: |
           cd ios/Flutter

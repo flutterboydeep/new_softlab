@@ -1,3 +1,4 @@
-# podhelper.rb file for integrating Flutter dependencies into iOS via CocoaPods
-require File.expand_path(File.join(File.dirname(__FILE__), 'Flutter', 'podhelper.rb'))
+flutter_application_path = File.expand_path('..', __dir__)
+load File.join(flutter_application_path, 'Flutter', 'podhelper.rb')
+
 
