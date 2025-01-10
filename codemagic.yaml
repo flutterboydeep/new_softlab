@@ -14,16 +14,12 @@ workflows:
           if [ ! -f "podhelper.rb" ]; then
             echo "Creating podhelper.rb manually"
             echo "# podhelper.rb" > podhelper.rb
-            echo "require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper.rb'), Dir.pwd)" >> podhelper.rb
-            echo "flutter_application_path = File.expand_path('..', __dir__)" >> podhelper.rb
-            echo "flutter_install_all_ios_pods(flutter_application_path)" >> podhelper.rb
+            echo "require File.expand_path(File.join(File.dirname(__FILE__), 'podhelper.rb'))" >> podhelper.rb
           fi
 
       - name: Set iOS deployment target
         script: |
           cd ios
-          echo "Setting iOS deployment target in Podfile"
-          # Check if the target is already set, and if not, set it
           if ! grep -q "platform :ios, '13.0'" Podfile; then
             sed -i '' '1s/^/platform :ios, "13.0"\n/' Podfile
           fi
@@ -31,7 +27,6 @@ workflows:
       - name: Install CocoaPods
         script: |
           cd ios
-          echo "Installing CocoaPods"
           pod install --repo-update
 
     artifacts:
