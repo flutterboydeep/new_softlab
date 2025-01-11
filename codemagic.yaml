@@ -18,8 +18,8 @@ workflows:
             echo "Creating flutter_export_environment.sh"
             cat <<'EOF' > flutter_export_environment.sh
 #!/bin/sh
-export FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))
-export FLUTTER_APPLICATION_PATH=$(pwd)
+export FLUTTER_ROOT=\$(dirname \$(dirname \$(which flutter)))
+export FLUTTER_APPLICATION_PATH=\$(pwd)
 export COCOAPODS_PARALLEL_CODE_SIGN=true
 EOF
           fi
