@@ -11,6 +11,18 @@ workflows:
       - name: Clean Build Artifacts
         script: flutter clean
 
+      - name: Update Ruby Version
+        script: |
+          ruby_version=3.1.4
+          rbenv install -s $ruby_version
+          rbenv global $ruby_version
+          ruby -v
+
+      - name: Install CocoaPods
+        script: |
+          sudo gem install cocoapods
+          pod --version
+
       - name: Generate flutter_export_environment.sh
         script: |
           cd ios/Flutter
@@ -21,16 +33,11 @@ workflows:
           fi
           cat flutter_export_environment.sh
 
-      - name: Install CocoaPods
+      - name: Install Pods
         script: |
           cd ios
           pod install
           cd ..
-      - name: Upgrade Dependencies
-        script: flutter pub upgrade
-      - name: Upgrade CocoaPods
-        script: sudo gem install cocoapods
-
 
       - name: Build iOS Release
         script: |
@@ -46,5 +53,3 @@ workflows:
       email:
         recipients:
           - gujjarji7838@gmail.com
-
-          
