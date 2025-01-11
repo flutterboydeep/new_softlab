@@ -1,13 +1,10 @@
 flutter_application_path = File.expand_path('..', __dir__)
 load File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')
-load File.join(flutter_application_path, 'ios', 'Flutter', 'flutter_export_environment.sh')  # Add this line to load the script
+load File.join(flutter_application_path, 'ios', 'Flutter', 'flutter_export_environment.sh')  # This line ensures the script is loaded
 
 target 'Runner' do
-  # Enable frameworks and modular headers for Swift and Objective-C compatibility
   use_frameworks!
   use_modular_headers!
 
-  # Install all Flutter iOS pods
   flutter_install_all_ios_pods(flutter_application_path)
 end
-
