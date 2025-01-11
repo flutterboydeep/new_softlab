@@ -11,26 +11,27 @@ workflows:
       - name: Clean Build Artifacts
         script: flutter clean
 
-      - name: Generate Missing flutter_export_environment.sh
+      - name: Generate flutter_export_environment.sh
         script: |
           cd ios/Flutter
           if [ ! -f "flutter_export_environment.sh" ]; then
-            echo "Generating flutter_export_environment.sh"
-            echo "#!/bin/sh" > flutter_export_environment.sh
-            echo "export FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))" >> flutter_export_environment.sh
-            echo "export FLUTTER_APPLICATION_PATH=$(pwd)" >> flutter_export_environment.sh
-            echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
+            echo "Creating flutter_export_environment.sh"
+            cat <<EOF > flutter_export_environment.sh
+#!/bin/sh
+export FLUTTER_ROOT=\$(dirname \$(dirname \$(which flutter)))
+export FLUTTER_APPLICATION_PATH=\$(pwd)
+export COCOAPODS_PARALLEL_CODE_SIGN=true
+EOF
           fi
 
       - name: Ensure podhelper.rb Exists
         script: |
           cd ios/Flutter
           if [ ! -f "podhelper.rb" ]; then
-            echo "Creating podhelper.rb manually"
+            echo "Creating podhelper.rb"
             cat <<EOF > podhelper.rb
 unless File.exist?(File.expand_path('../flutter_export_environment.sh', __dir__))
-  raise 'The Flutter podhelper script requires the flutter_export_environment.sh script. ' \
-        'Make sure your Flutter project is properly configured.'
+  raise 'The Flutter podhelper script requires the flutter_export_environment.sh script. Make sure your Flutter project is properly configured.'
 end
 
 require File.expand_path('../flutter_export_environment.sh', __dir__)
@@ -62,6 +63,6 @@ EOF
           rm -rf Pods Podfile.lock
           pod repo update
           pod install
-
+          
     artifacts:
       - build/ios/ipa
