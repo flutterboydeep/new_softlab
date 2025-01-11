@@ -7,7 +7,7 @@ unless File.exist?(File.expand_path('../flutter_export_environment.sh', __dir__)
   
   def flutter_install_all_ios_pods(flutter_application_path)
     flutter_root = File.expand_path('..', flutter_application_path)
-    load File.join(flutter_root, '.ios', 'Flutter', 'podhelper.rb')
+    load File.join(flutter_root, 'ios', 'Flutter', 'podhelper.rb')
   end
   
   
