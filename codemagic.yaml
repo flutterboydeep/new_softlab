@@ -15,9 +15,12 @@ workflows:
         script: |
           cd ios/Flutter
           if [ ! -f "podhelper.rb" ]; then
-          echo "Creating podhelper.rb manually"
-          echo "flutter_application_path = File.expand_path('..', __dir__)" > podhelper.rb
-          echo "load File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')" >> podhelper.rb
+            echo "Creating podhelper.rb manually"
+            echo "require File.expand_path(File.join(File.dirname(__FILE__), 'podhelper.rb'))" > podhelper.rb
+            echo "def flutter_install_all_ios_pods(flutter_application_path)" >> podhelper.rb
+            echo "  flutter_root = File.expand_path('..', flutter_application_path)" >> podhelper.rb
+            echo "  load File.join(flutter_root, '.ios', 'Flutter', 'podhelper.rb')" >> podhelper.rb
+            echo "end" >> podhelper.rb
           fi
 
       - name: Set iOS deployment target
@@ -26,16 +29,18 @@ workflows:
           if ! grep -q "platform :ios, '13.0'" Podfile; then
             sed -i '' '1s/^/platform :ios, "13.0"\n/' Podfile
           fi
-      - name: Debug Directory
+      - name: Debug Directory Structure
         script: |
-          cd ios
-          ls -la
+          echo "Checking ios/Flutter directory"
+          ls -la ios/Flutter
+          echo "Checking ios directory"
+          ls -la ios
       - name: Install CocoaPods
         script: |
           cd ios
-          rm -rf Podfile.lock Pods # Clean existing Pods
+          rm -rf Pods Podfile.lock
           pod repo update
           pod install
-
+          
     artifacts:
       - build/ios/ipa
