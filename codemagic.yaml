@@ -11,20 +11,37 @@ workflows:
       - name: Clean Build Artifacts
         script: flutter clean
 
-      - name: Generate Missing flutter_export_environment.sh
+      - name: Generate flutter_export_environment.sh
         script: |
           cd ios/Flutter
           if [ ! -f "flutter_export_environment.sh" ]; then
-            echo "Generating flutter_export_environment.sh"
-            echo "#!/bin/sh" > flutter_export_environment.sh
-            echo "export FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))" >> flutter_export_environment.sh
-            echo "export FLUTTER_APPLICATION_PATH=$(pwd)" >> flutter_export_environment.sh
+            echo "Creating flutter_export_environment.sh"
+            echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
+            echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
             echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
           fi
 
-      - name: Ensure podhelper.rb Exists
+      - name: Update iOS Deployment Target
         script: |
-          cd ios/Flutter
-          if [ ! -f "podhelper.rb" ]; then
-            echo "Creating podhelper.rb manually"
-            cat <<EOF >
+          cd ios
+          sed -i '' 's/MIN_IOS_DEPLOYMENT_TARGET = .*/MIN_IOS_DEPLOYMENT_TARGET = 13.0;/g' Podfile
+          sed -i '' 's/platform :ios, '.*'/platform :ios, '13.0'/g' Podfile
+          cd ..
+
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Build iOS Release
+        script: |
+          flutter build ios --release --no-codesign
+
+    artifacts:
+      - build/ios/ipa
+
+    publishing:
+      email:
+        recipients:
+          - gujjarji7838@gmail.com
