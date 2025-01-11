@@ -11,13 +11,13 @@ workflows:
       - name: Clean build artifacts
         script: flutter clean
 
-      - name: Ensure `podhelper.rb` exists
+      - name: Ensure podhelper.rb exists
         script: |
           cd ios/Flutter
           if [ ! -f "podhelper.rb" ]; then
-            echo "Creating podhelper.rb manually"
-            echo "# podhelper.rb" > podhelper.rb
-            echo "require File.expand_path(File.join(File.dirname(__FILE__), 'podhelper.rb'))" >> podhelper.rb
+          echo "Creating podhelper.rb manually"
+          echo "flutter_application_path = File.expand_path('..', __dir__)" > podhelper.rb
+          echo "load File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')" >> podhelper.rb
           fi
 
       - name: Set iOS deployment target
@@ -26,11 +26,16 @@ workflows:
           if ! grep -q "platform :ios, '13.0'" Podfile; then
             sed -i '' '1s/^/platform :ios, "13.0"\n/' Podfile
           fi
-
+      - name: Debug Directory
+        script: |
+          cd ios
+          ls -la
       - name: Install CocoaPods
         script: |
           cd ios
-          pod install --repo-update
+          rm -rf Podfile.lock Pods # Clean existing Pods
+          pod repo update
+          pod install
 
     artifacts:
       - build/ios/ipa
