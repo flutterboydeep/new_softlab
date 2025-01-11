@@ -34,6 +34,13 @@ workflows:
           echo "Generated flutter_export_environment.sh:"
           cat flutter_export_environment.sh
 
+      - name: Verify flutter_export_environment.sh
+        script: |
+          if [ ! -f ios/Flutter/flutter_export_environment.sh ]; then
+            echo "Error: flutter_export_environment.sh file is missing."
+            exit 1
+          fi
+
       # Update Ruby version to the required version for CocoaPods
       - name: Update Ruby Version
         script: |
@@ -58,7 +65,7 @@ workflows:
         script: |
           echo "Installing Pods..."
           cd ios
-          pod install
+          pod install || { echo "pod install failed."; exit 1; }
           cd ..
 
       # Build iOS release without codesigning
