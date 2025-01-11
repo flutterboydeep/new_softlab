@@ -13,16 +13,12 @@ workflows:
 
       - name: Generate flutter_export_environment.sh
         script: |
-          # Navigate to the Flutter iOS directory
           cd ios/Flutter
-          # Check if flutter_export_environment.sh exists, if not, create it
           if [ ! -f "flutter_export_environment.sh" ]; then
-            echo "Creating flutter_export_environment.sh file..."
             echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
             echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
             echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
           fi
-          # Display file content for verification
           cat flutter_export_environment.sh
 
       - name: Install CocoaPods
