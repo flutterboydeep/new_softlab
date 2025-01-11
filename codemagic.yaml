@@ -13,28 +13,34 @@ workflows:
 
       - name: Generate flutter_export_environment.sh
         script: |
-          # Navigate to the Flutter iOS directory
+          echo "Navigating to ios/Flutter directory..."
           cd ios/Flutter
-          # Check if flutter_export_environment.sh exists, if not, create it
-          if [ ! -f "flutter_export_environment.sh" ]; then
-            echo "Creating flutter_export_environment.sh file..."
-            echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
-            echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
-            echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
-          fi
-          # Display file content for verification
+          
+          # Generate flutter_export_environment.sh file if it does not exist
+          echo "Creating flutter_export_environment.sh file..."
+          echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
+          echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
+          echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
+          
+          # Verify the file content
+          echo "Contents of flutter_export_environment.sh:"
           cat flutter_export_environment.sh
 
-      - name: Install CocoaPods
+      - name: Install CocoaPods Dependencies
         script: |
           cd ios
-          pod install
+          echo "Running pod install..."
+          pod install || {
+            echo "CocoaPods installation failed.";
+            exit 1;
+          }
           cd ..
 
       - name: Build iOS Release
         script: |
+          echo "Building iOS release..."
           flutter build ios --release --no-codesign || {
-            echo "Build failed due to issues with dependencies.";
+            echo "Build failed.";
             exit 1;
           }
 
