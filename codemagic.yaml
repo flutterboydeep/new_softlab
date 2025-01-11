@@ -16,10 +16,10 @@ workflows:
           cd ios/Flutter
           if [ ! -f "flutter_export_environment.sh" ]; then
             echo "Creating flutter_export_environment.sh"
-            cat <<EOF > flutter_export_environment.sh
+            cat <<'EOF' > flutter_export_environment.sh
 #!/bin/sh
-export FLUTTER_ROOT=\$(dirname \$(dirname \$(which flutter)))
-export FLUTTER_APPLICATION_PATH=\$(pwd)
+export FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))
+export FLUTTER_APPLICATION_PATH=$(pwd)
 export COCOAPODS_PARALLEL_CODE_SIGN=true
 EOF
           fi
@@ -29,7 +29,7 @@ EOF
           cd ios/Flutter
           if [ ! -f "podhelper.rb" ]; then
             echo "Creating podhelper.rb"
-            cat <<EOF > podhelper.rb
+            cat <<'EOF' > podhelper.rb
 unless File.exist?(File.expand_path('../flutter_export_environment.sh', __dir__))
   raise 'The Flutter podhelper script requires the flutter_export_environment.sh script. Make sure your Flutter project is properly configured.'
 end
