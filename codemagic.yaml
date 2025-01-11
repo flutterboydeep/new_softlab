@@ -5,22 +5,36 @@ workflows:
       flutter: 3.19.5
       xcode: 15.0
     scripts:
+      # Clean build artifacts to ensure a fresh build
       - name: Clean Build Artifacts
         script: flutter clean
 
+      # Get Flutter dependencies
       - name: Run Flutter Pub Get
         script: flutter pub get
 
+      # Generate flutter_export_environment.sh
       - name: Generate flutter_export_environment.sh
         script: |
           cd ios/Flutter
+          echo "Generating flutter_export_environment.sh..."
           if [ ! -f "flutter_export_environment.sh" ]; then
             echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
             echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
             echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
+            echo "export FLUTTER_TARGET=lib/main.dart" >> flutter_export_environment.sh
+            echo "export FLUTTER_BUILD_DIR=build" >> flutter_export_environment.sh
+            echo "export FLUTTER_BUILD_NAME=1.0.0" >> flutter_export_environment.sh
+            echo "export FLUTTER_BUILD_NUMBER=1" >> flutter_export_environment.sh
+            echo "export DART_OBFUSCATION=false" >> flutter_export_environment.sh
+            echo "export TRACK_WIDGET_CREATION=true" >> flutter_export_environment.sh
+            echo "export TREE_SHAKE_ICONS=false" >> flutter_export_environment.sh
+            echo "export PACKAGE_CONFIG=.dart_tool/package_config.json" >> flutter_export_environment.sh
           fi
+          echo "Generated flutter_export_environment.sh:"
           cat flutter_export_environment.sh
 
+      # Update Ruby version to the required version for CocoaPods
       - name: Update Ruby Version
         script: |
           ruby_version=3.1.4
@@ -28,31 +42,40 @@ workflows:
           rbenv global $ruby_version
           ruby -v
 
-      - name: CocoaPods
+      # Install CocoaPods
+      - name: Install CocoaPods
         script: |
+          echo "Installing CocoaPods..."
           sudo gem install cocoapods
           pod --version
 
+      # Print the generated flutter_export_environment.sh for debugging
       - name: Print flutter_export_environment.sh
         script: cat ios/Flutter/flutter_export_environment.sh
 
-
+      # Install Pods for iOS dependencies
       - name: Install Pods
         script: |
+          echo "Installing Pods..."
           cd ios
           pod install
           cd ..
+
+      # Build iOS release without codesigning
       - name: Build iOS Release
         script: |
+          echo "Building iOS release..."
           flutter build ios --release --no-codesign || {
             echo "Build failed due to issues with dependencies.";
             exit 1;
           }
 
     artifacts:
+      # Include the IPA file in the build artifacts
       - build/ios/ipa
 
     publishing:
+      # Email the build output to specified recipients
       email:
         recipients:
           - gujjarji7838@gmail.com
