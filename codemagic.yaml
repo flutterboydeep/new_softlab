@@ -5,11 +5,21 @@ workflows:
       flutter: 3.19.5
       xcode: 15.0
     scripts:
+      - name: Clean Build Artifacts
+        script: flutter clean
+
       - name: Run Flutter Pub Get
         script: flutter pub get
 
-      - name: Clean Build Artifacts
-        script: flutter clean
+      - name: Generate flutter_export_environment.sh
+        script: |
+          cd ios/Flutter
+          if [ ! -f "flutter_export_environment.sh" ]; then
+            echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
+            echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
+            echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
+          fi
+          cat flutter_export_environment.sh
 
       - name: Update Ruby Version
         script: |
@@ -22,16 +32,6 @@ workflows:
         script: |
           sudo gem install cocoapods
           pod --version
-
-      - name: Generate flutter_export_environment.sh
-        script: |
-          cd ios/Flutter
-          if [ ! -f "flutter_export_environment.sh" ]; then
-            echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
-            echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
-            echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
-          fi
-          cat flutter_export_environment.sh
 
       - name: Install Pods
         script: |
