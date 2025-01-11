@@ -13,20 +13,17 @@ workflows:
 
       - name: Generate flutter_export_environment.sh
         script: |
+          # Navigate to the Flutter iOS directory
           cd ios/Flutter
+          # Check if flutter_export_environment.sh exists, if not, create it
           if [ ! -f "flutter_export_environment.sh" ]; then
-            echo "Creating flutter_export_environment.sh"
+            echo "Creating flutter_export_environment.sh file..."
             echo "export FLUTTER_ROOT=${FLUTTER_ROOT}" > flutter_export_environment.sh
             echo "export FLUTTER_APPLICATION_PATH=${PWD}" >> flutter_export_environment.sh
             echo "export COCOAPODS_PARALLEL_CODE_SIGN=true" >> flutter_export_environment.sh
           fi
-
-      - name: Update iOS Deployment Target
-        script: |
-          cd ios
-          sed -i '' 's/MIN_IOS_DEPLOYMENT_TARGET = .*/MIN_IOS_DEPLOYMENT_TARGET = 13.0;/g' Podfile
-          sed -i '' 's/platform :ios, '.*'/platform :ios, '13.0'/g' Podfile
-          cd ..
+          # Display file content for verification
+          cat flutter_export_environment.sh
 
       - name: Install CocoaPods
         script: |
@@ -36,7 +33,10 @@ workflows:
 
       - name: Build iOS Release
         script: |
-          flutter build ios --release --no-codesign
+          flutter build ios --release --no-codesign || {
+            echo "Build failed due to issues with dependencies.";
+            exit 1;
+          }
 
     artifacts:
       - build/ios/ipa
@@ -45,3 +45,5 @@ workflows:
       email:
         recipients:
           - gujjarji7838@gmail.com
+
+          
