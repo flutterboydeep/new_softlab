@@ -28,10 +28,14 @@ workflows:
           rbenv global $ruby_version
           ruby -v
 
-      - name: Install CocoaPods
+      - name: CocoaPods
         script: |
           sudo gem install cocoapods
           pod --version
+
+      - name: Print flutter_export_environment.sh
+        script: cat ios/Flutter/flutter_export_environment.sh
+
 
       - name: Install Pods
         script: |

@@ -2,6 +2,7 @@ unless File.exist?(File.expand_path('ios/Flutter/flutter_export_environment.sh',
     raise 'The Flutter podhelper script requires the flutter_export_environment.sh script. Make sure your Flutter project is properly configured.'
   end
   
+
   require File.expand_path('ios/Flutter/flutter_export_environment.sh', __dir__)
   
   def flutter_install_all_ios_pods(flutter_application_path)
